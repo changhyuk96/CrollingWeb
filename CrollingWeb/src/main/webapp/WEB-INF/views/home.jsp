@@ -44,13 +44,17 @@
 
 	<script>
 		function urlSubmit(){
-
+			
 			if(!$('#frm #siteURL').val()){		
 				alert('URL을 입력하세요.');
 			}
 			else
 				$('#frm').submit();
-			}
+		}
+		function coronaURL(){
+			$('#frm #siteURL').val("http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=1&brdGubun=13&ncvContSeq=&contSeq=&board_id=&gubun=");
+			$('#frm').submit();
+		}
 	</script>
 
 	<div id="main">
@@ -65,12 +69,12 @@
 			</p>
 			<p  style="text-align:center;">
 				<button type="button" class="btn btn-secondary" onclick="urlSubmit();">크롤링</button>
+			</p><br /><br/>
+			<p  style="text-align:center;">
+				<button type="button" class="btn btn-secondary" onclick="coronaURL();">코로나 상황 보기</button>
 			</p>
 		</form>
-
 	</div>
-
-
-
+	
 </body>
 </html>
