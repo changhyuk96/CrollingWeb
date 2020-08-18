@@ -1,7 +1,12 @@
 package com.my.crolling;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,16 +35,28 @@ public class InfoCreator {
 	public void createCoronaInfo(String url,Model model) throws Exception{
 		
 		Document document = Jsoup.connect(url).get();
-		Elements tableElement = document.select("table.num.midsize");
+		Elements tableElements = document.select("table.num.midsize tbody tr");
 		
-		CoronaInfo coronaInfo = new CoronaInfo();
+		List<CityInfo> cityInfoList = new ArrayList<CityInfo>();
 		
-		log.info(tableElement.html());
+		for(Element tableElement : tableElements) {
+			
+			// \\s+로 연속된 공백을 하나의 공백으로 취급해서 자르기
+			String[] array = tableElement.text().split("\\s+");
+			CityInfo cityInfo = new CityInfo(array[0], array[1], array[2]
+									, array[3], array[4], array[5], array[6]);
+			
+			cityInfoList.add(cityInfo);
+		}
 		
-		model.addAttribute("info", coronaInfo);
-		
-		
+		Collections.sort(cityInfoList, (c1, c2) ->  Integer.parseInt(c2.getTodayTotal())-Integer.parseInt(c1.getTodayTotal()));
+
+		// 		Collections.sort(cityInfoList, new ListComparator());
+
+		model.addAttribute("cityInfo", cityInfoList);
 	}
+	
+	
 	
 	public void createWeatherInfo(String url, Model model) throws Exception{
 		

@@ -2,7 +2,7 @@
 <%@ page session="false"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	
+
 <html>
 <head>
 <title>Home</title>
@@ -40,34 +40,51 @@ html, body {
 }
 </style>
 </head>
-
 <body>
-
-	<script>
-
-	</script>
-
-	<!-- 			
-	 -->
 
 	<div id="main">
 		<div id="frm">
-			<h4></h4>
-			<table class=table style="text-align:center;">
-				<thead class=thead-dark>
-					<tr><th> 합계 </th>
-					<th> 국내 발생 </th>
-					<th> 해외유입 </th>
-					<th> 총 확진자 </th>
-					<th> 격리중 </th>
-					<th> 격리해제 </th>
-				</thead>
 
+			<h3 id="date" style="margin: 30px 0px; color: red;"> </h3>
+			<p style="text-align:left;"> 가장 많이 나온곳 : ${cityInfo[1].cityName}</p>
+
+			<table class=table style="text-align: center;">
+				<thead class=thead-dark>
+					<tr>
+						<th>도시 명</th>
+						<th>합계</th>
+						<th>국내 발생</th>
+						<th>해외유입</th>
+						<th>격리중</th>
+						<th>격리해제</th>
+						<th>총 확진자</th>
+						<th>완치율</th>
+				</thead>
+				<tbody>
+					<c:forEach items="${cityInfo}" var="city">
+						<tr>
+							<td>${city.cityName}</td>
+							<td style="font-weight: bold;">${city.todayTotal}</td>
+							<td>${city.domestic}</td>
+							<td>${city.foreign}</td>
+							<td>${city.confirmedPatient}</td>
+							<td>${city.recoveredPatient}</td>
+							<td>${city.totalPatient}</td>
+							<td>${city.recoveredRate}</td>
+						</tr>
+					</c:forEach>
+				</tbody>
 			</table>
-			<a href="<c:url value="/" />" class="btn btn-secondary button">
-				돌아가기 </a>
+			<a href="<c:url value="/" />" class="btn btn-secondary button"
+				style="text-align: right;"> 돌아가기 </a>
 		</div>
 	</div>
 
+	<script>
+		let today = new Date();
+		let nowDate = today.toLocaleDateString();
+
+		document.getElementById('date').innerHTML = nowDate+" 코로나 상황!!!";
+	</script>
 </body>
 </html>

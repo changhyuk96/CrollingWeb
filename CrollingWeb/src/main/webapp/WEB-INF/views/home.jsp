@@ -63,6 +63,7 @@
 			<p style="text-align:center;">
 				# 주소 입력
 			</p>
+			<label style="font-size:10px; text-align:center;">날씨 주소: https://n.weather.naver.com/ </label>
 			<p>
 				<input type=text class="form-control" id=siteURL name=siteURL
 					style="width: 500px;">
@@ -71,7 +72,7 @@
 				<button type="button" class="btn btn-secondary" onclick="urlSubmit();">크롤링</button>
 			</p><br /><br/>
 			<p  style="text-align:center;">
-				<button type="button" class="btn btn-secondary" onclick="coronaURL();">코로나 상황 보기</button>
+				<button type="button" class="btn btn-secondary" onclick="coronaURL();">코로나 상황 크롤링</button>
 			</p>
 		</form>
 	</div>
