@@ -75,8 +75,11 @@ html, body {
 					</c:forEach>
 				</tbody>
 			</table>
-			<a href="<c:url value="/" />" class="btn btn-secondary button"
-				style="text-align: right;"> 돌아가기 </a>
+			<a href="<c:url value="/" />" class="btn btn-secondary button"> 돌아가기 </a>
+			<a class="btn btn-secondary" onclick="downloadExcel();"> 엑셀에 저장 </a>
+			
+			<form action="downloadExcel" method="post" name="f1">
+			</form>
 		</div>
 	</div>
 
@@ -85,6 +88,12 @@ html, body {
 		let nowDate = today.toLocaleDateString();
 
 		document.getElementById('date').innerHTML = nowDate+" 코로나 상황!!!";
+
+		function downloadExcel(){
+
+			var f = document.f1;
+			f.submit();
+		}
 	</script>
 </body>
 </html>

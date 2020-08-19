@@ -10,7 +10,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ui.Model;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.my.crolling.util.LogInterceptor;
 
@@ -18,21 +18,19 @@ public class InfoCreator {
 	
 	Logger log = LoggerFactory.getLogger(LogInterceptor.class);
 
-	public String siteCheck(String url, Model model) throws Exception{
+	public ModelAndView siteCheck(String url) throws Exception{
 		
 		if(url.contains("weather")) {
-			createWeatherInfo(url,model);
-			return "/weatherResult";
+			return createWeatherInfo(url);
 		}
 		else if(url.contains("ncov")) {
-			createCoronaInfo(url,model);
-			return "/coronaResult";
+			return createCoronaInfo(url);
 		}
 		
-		return "/";
+		return null;
 	}
 	
-	public void createCoronaInfo(String url,Model model) throws Exception{
+	public ModelAndView createCoronaInfo(String url) throws Exception{
 		
 		Document document = Jsoup.connect(url).get();
 		Elements tableElements = document.select("table.num.midsize tbody tr");
@@ -48,17 +46,22 @@ public class InfoCreator {
 			
 			cityInfoList.add(cityInfo);
 		}
+		Collections.sort(cityInfoList, new ListComparator());
+
+		//Collections.sort(cityInfoList, (c1, c2) ->  Integer.parseInt(c2.getTodayTotal())-Integer.parseInt(c1.getTodayTotal()));
+
+		ModelAndView modelAndView = new ModelAndView("excelView","CityInfo",cityInfoList);
+		modelAndView.addObject("cityInfo", cityInfoList);
+		modelAndView.setViewName("/coronaResult");
 		
-		Collections.sort(cityInfoList, (c1, c2) ->  Integer.parseInt(c2.getTodayTotal())-Integer.parseInt(c1.getTodayTotal()));
+		HomeController.list = cityInfoList;
 
-		// 		Collections.sort(cityInfoList, new ListComparator());
-
-		model.addAttribute("cityInfo", cityInfoList);
+		return modelAndView;
 	}
 	
 	
 	
-	public void createWeatherInfo(String url, Model model) throws Exception{
+	public ModelAndView createWeatherInfo(String url) throws Exception{
 		
 		// Jsoup.connect : 해당 URL의 HTML 페이지를 가져온다.
 		Document document = Jsoup.connect(url).get();
@@ -69,6 +72,12 @@ public class InfoCreator {
 		weatherInfo.setNowTemperature(cardElement.select("strong.current").text());
 		weatherInfo.setNowWeather(cardElement.select("span.weather").text());
 		
-		model.addAttribute("info",weatherInfo);
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("/weatherResult");
+		
+		modelAndView.addObject("info",weatherInfo);
+		
+		return modelAndView;
 	}
+	
 }
